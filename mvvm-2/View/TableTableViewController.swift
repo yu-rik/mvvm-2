@@ -11,18 +11,16 @@ import UIKit
 class TableTableViewController: UITableViewController {
 
     //свойство типа Profile
-    var profiles: [Profile]=[]
+   // var profiles: [Profile]=[]
     
+    //создаем свойство ViewModel
+    var viewModel: TableViewModelType?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //заполнение массива Profile
-        profiles = [
-            Profile(name: "Yurik", secondName: "Nosachenko", age: 36),
-            Profile(name: "Mark", secondName: "Nosachenko", age: 1),
-            Profile(name: "Yulia", secondName: "Didenko", age: 26)
-        ]
 
+        viewModel = ViewModel()
+        
     }
 
     
@@ -35,17 +33,20 @@ class TableTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return profiles.count
+        return viewModel?.numbersOfRows ?? 0
+        
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? TableViewCell
        //извлечение ячейки
-        guard let viewCell = cell else {return UITableViewCell()}
+        guard let viewCell = cell,
+        let viewModel = viewModel
+        else {return UITableViewCell()}
         
         // для наполнения ячейки
-        let profile = profiles[indexPath.row]
+        let profile = viewModel.profiles[indexPath.row]
 
         //наполнение ячейки
         viewCell.ageLabel.text = "\(profile.age)"
